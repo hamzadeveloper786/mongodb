@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CRUD Operation</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inclusive+Sans&family=Inter:wght@100;200;300;400;500;600;700;800;900&family=Josefin+Sans:wght@100;200;300;400;500;600;700&family=Kanit:wght@200;300;500;600;700&family=Mooli&family=Open+Sans:wght@300;500;600;700;800&family=Quicksand:wght@600&family=Roboto:wght@300&display=swap" rel="stylesheet">
+</head>
+
+<body onload="getAllPost()">
+    <h1>CRUD Operation</h1>
+
+    <fieldset>
+        <legend>
+            Create a Post
+        </legend>
+        <form onsubmit="createPost(); return false">
+
+            <label for="postTitle">Post Title:</label>
+            <input type="text" name="postTitle" id="postTitle" placeholder="Enter Post Title">
+
+            <br>
+            <label for="postText">Post Text:</label>
+            <textarea type="text" name="postText" id="postText" placeholder="Write something on your mind......"
+                cols="30" rows="4"></textarea>
+
+            <br>
+
+            <button type="submit">Post</button>
+        </form>
+    </fieldset>
+    <div id="result"></div>
+    <br><br>
+    <div id="posts"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.js"></script>
+    <script src="./main.mjs"></script>
+
+</body>
+
+</html>
