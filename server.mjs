@@ -1,7 +1,7 @@
 import express from 'express';
 import path from 'path';
 const __dirname = path.resolve();
-
+import './mongodb.mjs'
 import authRouter from './routes/auth.mjs'
 import commentRouter from './routes/comment.mjs'
 import feedRouter from './routes/feed.mjs'

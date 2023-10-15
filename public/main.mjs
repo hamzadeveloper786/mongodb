@@ -27,11 +27,12 @@ window.getAllPost = () =>  {
             console.log(response.data);
             let posts = ``
             response.data.map((eachPost) => {
-                posts += `<div id='card-${eachPost.id}' class="posts">
+                posts += `<div id='card-${eachPost._id}' class="posts">
                 <h3>${eachPost.title}</h3>
+                <span>Created On: ${eachPost.createdAt}</span>
                 <p>${eachPost.text}</p>
-                <button onclick="deletePost('${eachPost.id}')">Delete</button>
-                <button onclick="editPost('${eachPost.id}','${eachPost.title}','${eachPost.text}', )">Edit</button>
+                <button onclick="deletePost('${eachPost._id}')">Delete</button>
+                <button onclick="editPost('${eachPost._id}','${eachPost.title}','${eachPost.text}',)">Edit</button>
                 </div>`
             });
             document.querySelector("#posts").innerHTML = posts
@@ -43,20 +44,56 @@ window.getAllPost = () =>  {
             document.querySelector("#result").innerHTML = "error in post submission"
         })
 }
-window.deletePost = (postId) => {
-    console.log(postId, "delete");
-    axios.delete(`/api/v1/post/${postId}`)
-        .then(function (response) {
-            console.log(response.data);
-            getAllPost();
-        })
-        .catch(function (error) {
-            console.log(error.data)
-        })
+window.deletePost = (postId) => {Swal.fire({
+    title: 'Enter Password',
+    input: 'password',
+    inputAttributes: {
+        autocapitalize: 'off'
+    },
+    showCancelButton: true,
+    cancelButtonColor: "#24232c",
+    confirmButtonText: 'Delete',
+    confirmButtonColor: "#24232c",
+    showLoaderOnConfirm: true,
+    preConfirm: (password) => {
+        if (password === '3737701') {
+
+            return axios.delete(`/api/v1/post/${postId}`)
+                .then(response => {
+                        Swal.fire({
+                        icon: 'success',
+                        title: 'Post Deleted',
+                        timer: 1000,
+                        showConfirmButton: false
+                    });
+
+                    getAllPost();
+                })
+                .catch(error => {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Post Deleted',
+                        timer: 1000,
+                        showConfirmButton: false
+                    });
+                    getAllPost();
+                });
+        } else {
+
+            return Swal.fire({
+                icon: 'error',
+                title: 'Invalid Password',
+                text: 'Please enter correct password',
+                timer: 1000,
+                showConfirmButton: false
+            });
+        }
     }
+});
+}
     window.editPost = (postId, title, text) => {
 
-    console.log("edit: ", postId);
+    console.log("Edit: ", postId);
 
     document.querySelector(`#card-${postId}`).innerHTML =
         `<form onsubmit="savePost('${postId}')">
@@ -84,4 +121,59 @@ window.savePost = (postId)=>{
             console.log(error.data);
         })
 
+}
+// delete all
+
+window.deleteAllPosts = () => {
+    Swal.fire({
+        title: 'Enter Password',
+        input: 'password',
+        inputAttributes: {
+            autocapitalize: 'off'
+        },
+        showCancelButton: true,
+        cancelButtonColor: "#24232c",
+        confirmButtonText: 'Delete All Posts',
+        confirmButtonColor: "#24232c",
+        showLoaderOnConfirm: true,
+        preConfirm: (password) => {
+            if (password === '3737') {
+                return axios.delete(`/api/v1/posts/all`, {
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        data: {
+                            password: password
+                        }
+                    })
+                    .then(response => {
+                        // console.log(response.data);
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'All Posts Deleted',
+                            timer: 1000,
+                            showConfirmButton: false
+                        });
+                        getAllPost();
+                    })
+                    .catch(error => {
+                        // console.log(error.data);
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'All Posts Deleted',
+                            showConfirmButton: false
+                        });
+                        getAllPost();
+                    });
+            } else {
+                return Swal.fire({
+                    icon: 'error',
+                    title: 'Invalid Password',
+                    text: 'Please enter correct password',
+                    timer: 1000,
+                    showConfirmButton: false
+                });
+            }
+        }
+    });
 }
